@@ -1,6 +1,6 @@
 # LFSim27
 ## Introduction
-基本框架参考 [Gazebo ROS Project Template Guide](https://gazebosim.org/docs/latest/ros_gz_project_template_guide/)
+基本框架大致参考 [Gazebo ROS Project Template Guide](https://gazebosim.org/docs/latest/ros_gz_project_template_guide/)
 
 `description` - holds the sdf description of the simulated system and any other assets.
 

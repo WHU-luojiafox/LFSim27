@@ -1,0 +1,106 @@
+cmake_minimum_required(VERSION 3.22)
+project(gz_bridge)
+
+# Apply a local policy floor to legacy third-party CMake files (JsonCpp/GTest).
+# The project's own minimum remains 3.22; no command-line workaround is needed.
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "4.0")
+  if(NOT DEFINED CMAKE_POLICY_VERSION_MINIMUM OR
+      CMAKE_POLICY_VERSION_MINIMUM VERSION_LESS "3.10")
+    set(CMAKE_POLICY_VERSION_MINIMUM "3.10")
+  endif()
+endif()
+
+# Default to C++14
+if(NOT CMAKE_CXX_STANDARD)
+  set(CMAKE_CXX_STANDARD 14)
+endif()
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+# ros package
+find_package(ament_cmake REQUIRED)
+find_package(ament_index_cpp REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclcpp_components REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(robot_interfaces REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(ros_gz_bridge REQUIRED)
+
+# ignition package
+find_package(ignition-transport11 REQUIRED)
+set(IGN_TRANSPORT_VER ${ignition-transport11_VERSION_MAJOR})
+
+find_package(ignition-msgs8 REQUIRED)
+set(IGN_MSGS_VER ${ignition-msgs8_VERSION_MAJOR})
+
+message(STATUS "Compiling against Ignition Fortress")
+
+
+# include
+include_directories(include)
+
+set(dependencies
+  rclcpp
+  rclcpp_components
+  std_msgs
+  geometry_msgs
+  sensor_msgs
+  nav_msgs
+  robot_interfaces
+  tf2_ros
+)
+
+# pose_bridge nodes
+add_executable(pose_bridge  src/pose_bridge_node.cpp src/pose_bridge_main.cpp)
+target_link_libraries(pose_bridge
+    ignition-msgs${IGN_MSGS_VER}::core
+    ignition-transport${IGN_TRANSPORT_VER}::core
+)
+ament_target_dependencies(pose_bridge ${dependencies})
+ament_target_dependencies(pose_bridge ros_gz_bridge)
+
+# rfid_bridge nodes
+add_executable(rfid_bridge  src/rfid_bridge_node.cpp src/rfid_bridge_main.cpp)
+target_link_libraries(rfid_bridge
+    ignition-msgs${IGN_MSGS_VER}::core
+    ignition-transport${IGN_TRANSPORT_VER}::core
+)
+ament_target_dependencies(rfid_bridge ${dependencies})
+ament_target_dependencies(rfid_bridge ros_gz_bridge)
+
+# Install include directories
+install(DIRECTORY include/
+  DESTINATION include
+)
+
+# Install libraries
+# install(TARGETS ${PROJECT_NAME}
+#     EXPORT ${PROJECT_NAME}
+#     LIBRARY DESTINATION lib
+#     ARCHIVE DESTINATION lib
+#     RUNTIME DESTINATION bin
+#     INCLUDES DESTINATION include
+# )
+
+# Install executables
+install(TARGETS
+      pose_bridge
+      rfid_bridge
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# test
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
+
+# ament_export_targets(${PROJECT_NAME} HAS_LIBRARY_TARGET)
+ament_export_dependencies(${dependencies})
+ament_export_dependencies(ignition-msgs${IGN_MSGS_VER})
+ament_export_dependencies(ignition-transport${IGN_TRANSPORT_VER})
+ament_package()
