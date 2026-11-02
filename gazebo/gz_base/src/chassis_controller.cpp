@@ -39,7 +39,7 @@ ChassisController::ChassisController(
     });
   // ros sub
   using namespace std::placeholders;
-  ros_chassis_cmd_sub_ = node_->create_subscription<robot_interfaces::msg::NavCmd>(
+  ros_chassis_cmd_sub_ = node_->create_subscription<robot_interfaces::msg::ChassisCmd>(
     "robot_base/chassis_cmd", 10, std::bind(&ChassisController::chassis_cb, this, _1));
   ros_cmd_vel_sub_ = node_->create_subscription<geometry_msgs::msg::Twist>(
     "cmd_vel", 10, std::bind(&ChassisController::cmd_vel_cb, this, _1));
@@ -67,7 +67,7 @@ void ChassisController::update()
   chassis_actuator_->set(result_vel);
 }
 
-void ChassisController::chassis_cb(const robot_interfaces::msg::NavCmd::SharedPtr msg)
+void ChassisController::chassis_cb(const robot_interfaces::msg::ChassisCmd::SharedPtr msg)
 {
   if (msg->type == msg->VELOCITY) {
     target_vel_ = msg->twist;

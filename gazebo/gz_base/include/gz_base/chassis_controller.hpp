@@ -43,13 +43,13 @@ public:
   void reset();
 
 private:
-  void chassis_cb(const robot_interfaces::msg::NavCmd::SharedPtr msg);
+  void chassis_cb(const robot_interfaces::msg::ChassisCmd::SharedPtr msg);
   void cmd_vel_cb(const geometry_msgs::msg::Twist::SharedPtr msg);
   void update();
 
 private:
   rclcpp::Node::SharedPtr node_;
-  rclcpp::Subscription<robot_interfaces::msg::NavCmd>::SharedPtr ros_chassis_cmd_sub_;
+  rclcpp::Subscription<robot_interfaces::msg::ChassisCmd>::SharedPtr ros_chassis_cmd_sub_;
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr ros_cmd_vel_sub_;
   rclcpp::TimerBase::SharedPtr controller_timer_;
   // actuator and sensor

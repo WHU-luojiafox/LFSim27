@@ -8,7 +8,7 @@ Gazebo模块如下：
 
 * `GzImu`：IMU传感器模块，并增加云台API，`get_yaw()`和`get_pitch()` 
 * `GzJointEncoder`：关节编码器模块，并为云台增加额外API，`get_yaw()`和`get_pitch()` 
-* `GzNavCmd`：Gazebo底盘指令。
+* `GzChassisCmd`：Gazebo底盘指令。
 * `GzGimbalCmd`：Gazebo云台指令。
 
 封装的ROS控制器如下：
@@ -39,7 +39,7 @@ auto shooter_controller = std::make_shared<gz_base::ShooterController>(
 // 需要先创建云台编码器（需要用到yaw轴电机位置，用于跟随云台）和底盘命令模块
 auto gz_gimbal_encoder = std::make_shared<gz_base::GzJointEncoder>(
     gz_node, gz_joint_state_topic);
-auto gz_chassis_cmd = std::make_shared<gz_base::GzNavCmd>(gz_node, gz_chassis_cmd_topic);
+auto gz_chassis_cmd = std::make_shared<gz_base::GzChassisCmd>(gz_node, gz_chassis_cmd_topic);
 // 创建底盘控制器
 auto chassis_controller = std::make_shared<gz_base::ChassisController>(
     ros_node, "robot_base/chassis_cmd", gz_chassis_cmd, gz_gimbal_encoder);

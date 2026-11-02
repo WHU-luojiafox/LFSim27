@@ -35,8 +35,8 @@ target_link_libraries(MecanumDrive2
   ignition-gazebo${IGN_GAZEBO_VER}::ignition-gazebo${IGN_GAZEBO_VER}
 )
 
-# for plugins OmniDrive
-add_library(OmniDrive SHARED plugins/omni_drive/OmniDrive.cc)
+# for plugins ProjectileShooter
+add_library(OmniDrive SHARED plugins/mecanum_drive2/OmniDrive.cc)
 target_compile_features(OmniDrive PRIVATE cxx_std_17)
 target_link_libraries(OmniDrive Eigen3::Eigen
   ignition-gazebo${IGN_GAZEBO_VER}::ignition-gazebo${IGN_GAZEBO_VER})

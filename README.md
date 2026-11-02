@@ -10,6 +10,9 @@
 
 `bringup` - holds launch files and high level utilities.
 
+## Doc
+
+[getstarted](https://gazebosim.org/docs/fortress/getstarted/)
 
 ## Usage
 

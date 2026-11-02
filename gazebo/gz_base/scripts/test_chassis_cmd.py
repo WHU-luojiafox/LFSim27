@@ -4,11 +4,11 @@ import termios
 import tty
 
 import rclpy
-from robot_interfaces.msg import NavCmd
+from robot_interfaces.msg import ChassisCmd
 
 msg = """
 This node takes keypresses from the keyboard and publishes them
-as NavCmd messages.
+as ChassisCmd messages.
 ---------------------------
 Moving around:
         w    
@@ -28,7 +28,7 @@ def getKey(settings):
     return key
 
 def getChassisContolMsg(x,y,w,type = 1):
-    control_info = NavCmd()
+    control_info = ChassisCmd()
     control_info.type = type
     control_info.twist.linear.x = x
     control_info.twist.linear.y = y
@@ -47,7 +47,7 @@ def main():
     node.declare_parameter('w',1.0)
     v=node.get_parameter('v').value
     w=node.get_parameter('w').value
-    pub = node.create_publisher(NavCmd, 'chassis_cmd', 10)
+    pub = node.create_publisher(ChassisCmd, 'chassis_cmd', 10)
     print("node params v:%f,w:%f"%(v,w))
     print(msg)
     vel_x=vel_y=vel_w=0.0
